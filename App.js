@@ -15,8 +15,7 @@ const App = () => {
   const [task, setTask] = useState('');
   const [id, setId] = useState('');
   const [toggle, setToggle] = useState(false);
-
-  // const screenDimension=Dimensions.getW
+  const [isTask, setIsTask] = useState(false);
 
   const addMore = () => {
     if (!toggle) {
@@ -36,52 +35,82 @@ const App = () => {
     setTask(elem);
   };
 
+  const viewTask = elem => {
+    setIsTask(true);
+    setTask(elem);
+  };
+
   const deleteTask = id => {
-    setList(list.filter((elem, ind) => id != ind));
+    setList(list.filter(ind => id != ind));
   };
   return (
     <View style={styles.container}>
       <Text style={{fontSize: 30, textAlign: 'center', paddingTop: 35}}>
-        {!toggle ? 'Add Notes' : 'Edit Note'}
+        {isTask ? 'Task Details' : !toggle ? 'Add Task' : 'Edit Task'}
       </Text>
-      <TextInput
-        style={styles.input}
-        value={task}
-        onChangeText={setTask}
-        placeholder=" Task "
-      />
-      <View style={styles.button}>
-        <Button
-          onPress={addMore}
-          title={!toggle ? 'Add Task' : 'Edit Task'}
-          color="#841584"
-        />
-      </View>
-      <View>
-        <Text style={{fontSize: 30, textAlign: 'center'}}>Notes List</Text>
-        {list.map((elem, ind) => (
-          <>
-            <Text key={ind} style={{fontSize: 20, padding: 10}}>
-              {elem}
+      {!isTask ? (
+        <>
+          <TextInput
+            style={styles.input}
+            value={task}
+            onChangeText={setTask}
+            placeholder="Task"
+          />
+          <View style={styles.button}>
+            <Button
+              onPress={addMore}
+              title={!toggle ? 'Add Task' : 'Edit Task'}
+              color="#841584"
+            />
+          </View>
+          <View>
+            <Text
+              style={{fontSize: 30, textAlign: 'center', paddingVertical: 10}}>
+              Task List
             </Text>
+            {list.map((elem, ind) => (
+              <>
+                <TouchableOpacity
+                  key={ind}
+                  style={{fontSize: 20, padding: 10}}
+                  onPress={() => viewTask(elem)}>
+                  <Text>{elem}</Text>
+                </TouchableOpacity>
 
-            <View style={styles.button}>
-              <Button
-                onPress={() => deleteTask(ind)}
-                title="Delete Task"
-                color="red"
-              />
-            </View>
-            <View style={styles.button}>
-              <Button
-                onPress={() => editTask(elem, ind)}
-                title="Edit Task"
-                color="grey"
-              />
-            </View>
-          </>
-        ))}
-      </View>
+                <View style={styles.button}>
+                  <Button
+                    onPress={() => editTask(elem, ind)}
+                    title="Edit"
+                    color="grey"
+                  />
+                </View>
+                <View style={styles.button}>
+                  <Button
+                    onPress={() => deleteTask(ind)}
+                    title="Delete"
+                    color="red"
+                  />
+                </View>
+              </>
+            ))}
+          </View>
+        </>
+      ) : (
+        <View>
+          <Text style={{paddingVertical: 20, paddingHorizontal: 10}}>
+            {task}
+          </Text>
+          <View style={styles.button}>
+            <Button
+              onPress={() => {
+                setIsTask(false), setTask('');
+              }}
+              title="Back"
+              color="violet"
+            />
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -92,14 +121,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink',
   },
   input: {
-    borderBottomWidth: 1,
     marginHorizontal: 10,
+    border: 'none',
+    borderRadius: 10,
     marginTop: 40,
+    height: 40,
     marginBottom: 10,
     backgroundColor: '#fff',
-    paddingVertical: 3,
+    paddingVertical: 1,
     paddingHorizontal: 13,
-    // textAlign: 'center',
   },
   button: {
     margin: 10,
