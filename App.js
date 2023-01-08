@@ -41,7 +41,7 @@ const App = () => {
   };
 
   const deleteTask = id => {
-    setList(list.filter(ind => id != ind));
+    setList(list.filter((elem, ind) => id != ind));
   };
   return (
     <View style={styles.container}>
