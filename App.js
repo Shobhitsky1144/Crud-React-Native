@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {
   Button,
-  Dimensions,
-  FlatList,
   StyleSheet,
   Text,
   TextInput,
@@ -18,7 +16,7 @@ const App = () => {
   const [isTask, setIsTask] = useState(false);
 
   const addMore = () => {
-    if (!toggle) {
+    if (!toggle && task) {
       setList([...list, task]);
       setTask('');
     } else {
@@ -45,7 +43,7 @@ const App = () => {
   };
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 30, textAlign: 'center', paddingTop: 35}}>
+      <Text style={styles.heading}>
         {isTask ? 'Task Details' : !toggle ? 'Add Task' : 'Edit Task'}
       </Text>
       {!isTask ? (
@@ -64,10 +62,7 @@ const App = () => {
             />
           </View>
           <View>
-            <Text
-              style={{fontSize: 30, textAlign: 'center', paddingVertical: 10}}>
-              Task List
-            </Text>
+            <Text style={styles.heading}>Task List</Text>
             {list.map((elem, ind) => (
               <>
                 <TouchableOpacity
@@ -97,16 +92,15 @@ const App = () => {
         </>
       ) : (
         <View>
-          <Text style={{paddingVertical: 20, paddingHorizontal: 10}}>
-            {task}
-          </Text>
+          <Text style={styles.heading}>{task}</Text>
           <View style={styles.button}>
             <Button
               onPress={() => {
-                setIsTask(false), setTask('');
+                setIsTask(false);
+                setTask('');
               }}
               title="Back"
-              color="violet"
+              color="black"
             />
           </View>
         </View>
@@ -119,6 +113,13 @@ const styles = StyleSheet.create({
   container: {
     height: 900,
     backgroundColor: 'pink',
+  },
+  heading: {
+    fontSize: 30,
+    textAlign: 'center',
+    paddingTop: 35,
+    fontWeight: 'bold',
+    textShadowColor: 'red',
   },
   input: {
     marginHorizontal: 10,
